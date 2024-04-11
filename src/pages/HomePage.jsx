@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchTrendingMovies } from "../api/api";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -15,7 +15,9 @@ const HomePage = () => {
         {movies.map((movie) => {
           return (
             <li key={movie.id}>
-              <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+              <Link to={`/movies/${movie.id}`}>
+                {movie.title} state={{ from: location }}
+              </Link>
             </li>
           );
         })}

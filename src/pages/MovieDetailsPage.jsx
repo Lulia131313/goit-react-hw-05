@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { fetchMovieDetails } from "../api/api";
-
+import { useNavigate, useLocation } from "react-router-dom";
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [movie, setMovie] = useState(null);
 
@@ -17,8 +19,7 @@ const MovieDetailsPage = () => {
   }
   return (
     <div>
-      <Link to="/">Back</Link>
-      <h2>MovieDetailsPage</h2>
+      <button onClick={() => navigate(-1)}>Back</button>
 
       <div>
         <img
