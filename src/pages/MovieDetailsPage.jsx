@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { fetchMovieDetails } from "../api/api";
@@ -7,6 +7,7 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const goBack = useRef(location.state?.from);
 
   const [movie, setMovie] = useState(null);
 
@@ -19,7 +20,8 @@ const MovieDetailsPage = () => {
   }
   return (
     <div>
-      <button onClick={() => navigate(-1)}>Back</button>
+      <Link to={goBack.current}>Back</Link>
+      {/* <button onClick={() => navigate(-1)}>Back</button> */}
 
       <div>
         <img

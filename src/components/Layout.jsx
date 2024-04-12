@@ -1,7 +1,12 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
+import { useEffect } from "react";
 
 const Layout = () => {
+  const location = useLocation();
+  useEffect(() => {
+    document.title = location.pathname.split("/").join("")[0];
+  }, [location.pathname]);
   return (
     <div>
       <Navbar />
