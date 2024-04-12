@@ -55,19 +55,16 @@ const MoviesPage = () => {
           </button>
         </Form>
       </Formik>
-      {searchResults.length === 0 ? (
-        <p>Ничего не найдено</p>
-      ) : (
-        <ul>
-          {searchResults.map((movie) => (
-            <li key={movie.id}>
-              <Link to={`/movies/${movie.id}`} state={{ from: location }}>
-                {movie.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+
+      <ul>
+        {searchResults.map((movie) => (
+          <li key={movie.id}>
+            <Link to={`/movies/${movie.id}`} state={{ from: location }}>
+              {movie.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
