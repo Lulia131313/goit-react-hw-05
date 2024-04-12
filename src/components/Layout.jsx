@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 const Layout = () => {
   const location = useLocation();
@@ -11,7 +11,9 @@ const Layout = () => {
     <div>
       <Navbar />
       <section className="outlet">
-        <Outlet />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Outlet />
+        </Suspense>
       </section>
     </div>
   );

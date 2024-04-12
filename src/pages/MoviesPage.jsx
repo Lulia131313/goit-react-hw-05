@@ -1,39 +1,39 @@
 import { Formik, Form, Field } from "formik";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { searchMovies } from "../api/api";
-import {
-  Link,
-  useNavigate,
-  useSearchParams,
-  useLocation,
-} from "react-router-dom";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
 
 const MoviesPage = () => {
   const [searchResults, setSearchResults] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const query = searchParams.get("search") || "";
+  const [searchParams, setSearchParams] = useSearchParams("");
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
+  const query = searchParams.get("query") || "";
 
   useEffect(() => {
-    const storedSearchResults = JSON.parse(
-      localStorage.getItem("searchResults")
-    );
-    if (storedSearchResults) {
-      setSearchResults(storedSearchResults);
+    async function fetchData() {
+      if (query) {
+        try {
+          const response = await searchMovies(query);
+          setSearchResults(response);
+          setSearchQuery(query);
+        } catch (error) {
+          console.error("Failed to search movies:", error.message);
+        }
+      }
     }
-  }, []);
+    fetchData();
+  }, [query]);
 
-  const initialValues = {
-    search: query,
-  };
+  useEffect(() => {
+    setSearchQuery("");
+  }, [location.pathname]);
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const movies = await searchMovies(values.search);
-      setSearchResults(movies);
-      setSearchParams(values.search ? { search: values.search } : {});
-      localStorage.setItem("searchResults", JSON.stringify(movies));
+      const response = await searchMovies(values.search);
+      setSearchResults(response);
+      setSearchParams({ query: values.search });
       resetForm();
     } catch (error) {
       console.error("Failed to search movies:", error.message);
@@ -42,7 +42,7 @@ const MoviesPage = () => {
 
   return (
     <div>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik initialValues={{ search: searchQuery }} onSubmit={handleSubmit}>
         <Form>
           <Field
             type="text"
@@ -55,16 +55,21 @@ const MoviesPage = () => {
           </button>
         </Form>
       </Formik>
-      <ul>
-        {searchResults.map((movie) => (
-          <li key={movie.id}>
-            <Link to={`/movies/${movie.id}`} state={{ from: location }}>
-              {movie.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {searchResults.length === 0 ? (
+        <p>Ничего не найдено</p>
+      ) : (
+        <ul>
+          {searchResults.map((movie) => (
+            <li key={movie.id}>
+              <Link to={`/movies/${movie.id}`} state={{ from: location }}>
+                {movie.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
+
 export default MoviesPage;

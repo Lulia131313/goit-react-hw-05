@@ -35,7 +35,7 @@ export const searchMovies = async (query) => {
   }
 };
 
-// Функція для отримання деталей про конкретний фільм
+// Функція для отримання деталей про  фільм
 export const fetchMovieDetails = async (movieId) => {
   try {
     const response = await axiosInstance.get(`/movie/${movieId}`);
@@ -45,7 +45,7 @@ export const fetchMovieDetails = async (movieId) => {
   }
 };
 
-// Функція для отримання інформації про акторський склад фільму
+// Функція акторський склад фільму
 export const fetchMovieCredits = async (movieId) => {
   try {
     const response = await axiosInstance.get(`/movie/${movieId}/credits`);
@@ -55,7 +55,7 @@ export const fetchMovieCredits = async (movieId) => {
   }
 };
 
-// Функція для отримання оглядів фільму
+// Функція для  оглядів фільму
 export const fetchMovieReviews = async (movieId) => {
   try {
     const response = await axiosInstance.get(`/movie/${movieId}/reviews`);
