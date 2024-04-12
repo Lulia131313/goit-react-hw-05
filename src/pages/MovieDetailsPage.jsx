@@ -3,16 +3,18 @@ import { Link, Outlet } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { fetchMovieDetails } from "../api/api";
 import { useNavigate, useLocation } from "react-router-dom";
+
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
-  const navigate = useNavigate();
   const location = useLocation();
-  const goBack = useRef(location.state?.from);
+  const goBack = useRef(location.state?.from || "/");
 
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    fetchMovieDetails(movieId).then((data) => setMovie(data));
+    fetchMovieDetails(movieId).then((data) => {
+      setMovie(data);
+    });
   }, [movieId]);
 
   if (!movie) {
@@ -20,7 +22,7 @@ const MovieDetailsPage = () => {
   }
   return (
     <div>
-      <Link to={goBack.current}>Back</Link>
+      <Link to={goBack.current || "/"}>Back</Link>
       {/* <button onClick={() => navigate(-1)}>Back</button> */}
 
       <div>
